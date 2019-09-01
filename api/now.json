@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "transfrom",
+  "builds": [
+    {
+      "src": "**/*.js",
+      "use": "@now/node"
+    }
+  ]
+}

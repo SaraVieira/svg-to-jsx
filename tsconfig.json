@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["dom", "es2015", "es2017"],
+    "sourceMap": true,
+    "moduleResolution": "node"
+  }
+}

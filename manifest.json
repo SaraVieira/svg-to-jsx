@@ -1,0 +1,7 @@
+{
+  "name": "SVG to JSX",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "id": "749818562498396194"
+}
