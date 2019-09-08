@@ -1,7 +1,16 @@
 <script src="https://unpkg.com/prettier@1.13.0/standalone.js"></script>
 <script src="https://unpkg.com/prettier@1.13.0/parser-babylon.js"></script>
+<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
 <script>
+  function selectElementContents(el) {
+    var range = document.createRange()
+    range.selectNodeContents(el)
+    var sel = window.getSelection()
+    sel.removeAllRanges()
+    sel.addRange(range)
+  }
   window.onmessage = async event => {
+    const data = event.data.pluginMessage.data
     if (event.data.pluginMessage.type === 'networkRequest') {
       fetch('https://transfrom.saravieira.now.sh', {
         method: 'POST',
@@ -9,7 +18,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          svg: event.data.pluginMessage.data
+          svg: data
         })
       })
         .then(rsp => rsp.json())
@@ -21,5 +30,29 @@
           parent.postMessage({ pluginMessage: a }, '*')
         })
     }
+    if (event.data.pluginMessage.type === 'show-ui') {
+      const codeEl = document.querySelector('#code')
+      new ClipboardJS('.copy')
+      codeEl.textContent = data
+      selectElementContents(codeEl)
+    }
   }
 </script>
+
+<html>
+  <style>
+    .copy {
+      border: 1px solid #e5e5e5;
+      background: white;
+      padding: 8px 12px;
+      font-weight: 600;
+      width: 100%;
+    }
+  </style>
+  <div>
+    <button class="copy" data-clipboard-target="#code">
+      Copy to Clipboard
+    </button>
+    <pre><code id="code" style="white-space:pre-wrap;">sadas</code></pre>
+  </div>
+</html>
