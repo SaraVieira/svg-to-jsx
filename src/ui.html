@@ -1,5 +1,3 @@
-<script src="https://unpkg.com/prettier@1.13.0/standalone.js"></script>
-<script src="https://unpkg.com/prettier@1.13.0/parser-babylon.js"></script>
 <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
 <script>
   function selectElementContents(el) {
@@ -23,11 +21,7 @@
       })
         .then(rsp => rsp.json())
         .then(data => {
-          const a = prettier.format(data.data, {
-            parser: 'babylon',
-            plugins: prettierPlugins
-          })
-          parent.postMessage({ pluginMessage: a }, '*')
+          parent.postMessage({ pluginMessage: data.data }, '*')
         })
     }
     if (event.data.pluginMessage.type === 'show-ui') {

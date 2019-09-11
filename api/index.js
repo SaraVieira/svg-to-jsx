@@ -3,6 +3,7 @@ const helmet = require('helmet')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const svgr = require('@svgr/core')
+const prettier = require('prettier')
 const port = 3000
 
 const app = express()
@@ -15,7 +16,9 @@ app.post('/', (req, res) => {
   console.log(req.body)
   const data = svgr.default.sync(req.body.svg)
   res.send({
-    data
+    data: prettier.format(data, {
+      parser: 'babylon',
+    })
   })
 })
 
