@@ -75,26 +75,26 @@ export default () => {
   return (
     <>
       <StyledForm {...form}>
-        <FormLabel {...form} name="name">
+        <FormLabel {...form} name='name'>
           Component Name
         </FormLabel>
-        <FormInput {...form} name="name" placeholder="Icon" />
+        <FormInput {...form} name='name' placeholder='Icon' />
         <label>
-          <FormCheckbox {...form} name="icon" value="icon" /> Hide Dimensions
+          <FormCheckbox {...form} name='icon' value='icon' /> Hide Dimensions
         </label>
         <label>
-          <FormCheckbox {...form} name="native" value="native" /> React Native
+          <FormCheckbox {...form} name='native' value='native' /> React Native
         </label>
-        <FormLabel {...form} name="svgCode">
+        <FormLabel {...form} name='svgCode'>
           SVG Code
         </FormLabel>
         <FormInput
           {...form}
-          name="svgCode"
-          placeholder="Please paste your svg code here"
-          as="textarea"
+          name='svgCode'
+          placeholder='Please paste your svg code here'
+          as='textarea'
         />
-        <FormMessage {...form} name="svgCode" />
+        <FormMessage {...form} name='svgCode' />
         <Submit {...form}>Submit</Submit>
       </StyledForm>
       {jsCode ? <Code code={jsCode}> </Code> : null}

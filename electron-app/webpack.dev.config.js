@@ -45,7 +45,7 @@ module.exports = {
       chunks: false,
       children: false
     },
-    before() {
+    before () {
       spawn('electron', ['.'], {
         shell: true,
         env: process.env,

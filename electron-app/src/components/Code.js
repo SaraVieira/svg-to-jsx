@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import CopyIcon from './CopyIcon'
 import DownloadIcon from './DownloadIcon'
 import copy from 'copy-to-clipboard'
-import { remote, app } from 'electron'
+import { remote } from 'electron'
 
 const { dialog } = remote
 const fs = require('fs')
@@ -43,7 +43,7 @@ const save = (code, name, jsx) => {
 }
 
 export default ({ code, filename, jsx }) => (
-  <Highlight {...defaultProps} theme={nightOwl} code={code} language="jsx">
+  <Highlight {...defaultProps} theme={nightOwl} code={code} language='jsx'>
     {({ className, style, tokens, getLineProps, getTokenProps }) => (
       <pre
         className={className}
@@ -58,9 +58,9 @@ export default ({ code, filename, jsx }) => (
         />
         <Download onClick={() => save(code, filename, jsx)} />
         {tokens.map((line, i) => (
-          <div {...getLineProps({ line, key: i })}>
+          <div key={i} {...getLineProps({ line, key: i })}>
             {line.map((token, key) => (
-              <span {...getTokenProps({ token, key })} />
+              <span key={key} {...getTokenProps({ token, key })} />
             ))}
           </div>
         ))}

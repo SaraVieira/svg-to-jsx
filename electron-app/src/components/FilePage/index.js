@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Dropzone, { useDropzone } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 
 import svgr from '@svgr/core'
 import Code from '../Code'
@@ -11,9 +11,7 @@ import {
   unstable_useFormState as useFormState,
   unstable_Form as Form,
   unstable_FormLabel as FormLabel,
-  unstable_FormInput as FormInput,
-  unstable_FormMessage as FormMessage,
-  unstable_FormSubmitButton as FormSubmitButton
+  unstable_FormInput as FormInput
 } from 'reakit/Form'
 
 const StyledForm = styled(Form)`
@@ -73,10 +71,9 @@ export default () => {
     values: { native: false, name: 'Icon', icon: false, jsx: false }
   })
 
-  function setupReader(file) {
+  function setupReader (file) {
     var reader = new FileReader()
-    reader.onload = function() {
-      // get file content
+    reader.onload = function () {
       const binaryStr = reader.result
       setSVGCode(svgCode => svgCode.concat({ svg: binaryStr, name: file.name }))
     }
@@ -111,20 +108,20 @@ export default () => {
   return (
     <>
       <StyledForm {...form}>
-        <FormLabel {...form} name="name">
+        <FormLabel {...form} name='name'>
           Component Name
         </FormLabel>
-        <FormInput {...form} name="name" placeholder="Icon" />
+        <FormInput {...form} name='name' placeholder='Icon' />
         <label>
-          <FormCheckbox {...form} name="icon" value="icon" /> Hide Dimensions
+          <FormCheckbox {...form} name='icon' value='icon' /> Hide Dimensions
         </label>
         <label>
-          <FormCheckbox {...form} name="native" value="native" /> React Native
+          <FormCheckbox {...form} name='native' value='native' /> React Native
         </label>
         <label>
-          <FormCheckbox {...form} name="jsx" value="jsx" /> Use JSX extension
+          <FormCheckbox {...form} name='jsx' value='jsx' /> Use JSX extension
         </label>
-        <FormLabel {...form} name="svgCode">
+        <FormLabel {...form} name='svgCode'>
           SVG File
         </FormLabel>
         <DropzoneContainer {...getRootProps()}>
@@ -142,15 +139,15 @@ export default () => {
       </StyledForm>
       {jsCode.length
         ? jsCode.map((code, i) => (
-            <CodeWrapper key={i}>
-              <label>{code.name}</label>
-              <Code
-                code={code.svg}
-                filename={code.name}
-                jsx={form.values.jsx}
-              />
-            </CodeWrapper>
-          ))
+          <CodeWrapper key={i}>
+            <label>{code.name}</label>
+            <Code
+              code={code.svg}
+              filename={code.name}
+              jsx={form.values.jsx}
+            />
+          </CodeWrapper>
+        ))
         : null}
     </>
   )

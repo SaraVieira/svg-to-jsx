@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab'
 import CodePage from './CodePage'
 import FilePage from './FilePage'
@@ -51,18 +51,18 @@ const App = () => {
   const tab = useTabState({ selectedId: 'file' })
   return (
     <>
-      <TabList {...tab} aria-label="My tabs">
-        <TabButton {...tab} stopId="code">
+      <TabList {...tab} aria-label='My tabs'>
+        <TabButton {...tab} stopId='code'>
           Import SVG Code
         </TabButton>
-        <TabButton {...tab} stopId="file">
+        <TabButton {...tab} stopId='file'>
           Import SVG File
         </TabButton>
       </TabList>
-      <TabPanel {...tab} stopId="code">
+      <TabPanel {...tab} stopId='code'>
         <CodePage />
       </TabPanel>
-      <TabPanel {...tab} stopId="file">
+      <TabPanel {...tab} stopId='file'>
         <FilePage />
       </TabPanel>
     </>

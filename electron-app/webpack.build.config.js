@@ -1,7 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const BabiliPlugin = require('babili-webpack-plugin')
 
 module.exports = {
   module: {
