@@ -49,10 +49,12 @@ app.post('/', (req, res) => {
       },
       { componentName: name || 'Icon' }
     )
+    console.log('data', data)
     res.send({
       data
     })
-  } catch {
+  } catch (e) {
+    console.log('error', e)
     res.status(500).send({
       error: "Couldn't parse SVG"
     })
