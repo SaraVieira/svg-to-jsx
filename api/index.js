@@ -28,29 +28,35 @@ app.post('/', (req, res) => {
     svgProps,
     titleProp
   } = req.body
-  const data = svgr.default.sync(
-    svg,
-    {
-      native,
-      ext,
-      icon,
-      dimensions,
-      expandProps,
-      ref,
-      replaceAttrValues,
-      svgProps,
-      titleProp,
-      plugins: [
-        '@svgr/plugin-svgo',
-        '@svgr/plugin-jsx',
-        '@svgr/plugin-prettier'
-      ]
-    },
-    { componentName: name || 'Icon' }
-  )
-  res.send({
-    data
-  })
+  try {
+    const data = svgr.default.sync(
+      svg,
+      {
+        native,
+        ext,
+        icon,
+        dimensions,
+        expandProps,
+        ref,
+        replaceAttrValues,
+        svgProps,
+        titleProp,
+        plugins: [
+          '@svgr/plugin-svgo',
+          '@svgr/plugin-jsx',
+          '@svgr/plugin-prettier'
+        ]
+      },
+      { componentName: name || 'Icon' }
+    )
+    res.send({
+      data
+    })
+  } catch {
+    res.status(500).send({
+      error: "Couldn't parse SVG"
+    })
+  }
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
