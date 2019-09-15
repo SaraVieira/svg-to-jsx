@@ -3,8 +3,10 @@ const helmet = require('helmet')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const svgr = require('@svgr/core')
-const prettier = require('prettier')
 const port = 3000
+require('@svgr/plugin-svgo')
+require('@svgr/plugin-prettier')
+require('@svgr/plugin-jsx')
 
 const app = express()
 app.use(helmet())
@@ -13,12 +15,41 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.post('/', (req, res) => {
-  console.log(req.body)
-  const data = svgr.default.sync(req.body.svg)
+  const {
+    name,
+    svg,
+    native,
+    ext = 'js',
+    icon,
+    dimensions,
+    expandProps = 'end',
+    ref,
+    replaceAttrValues,
+    svgProps,
+    titleProp
+  } = req.body
+  const data = svgr.default.sync(
+    svg,
+    {
+      native,
+      ext,
+      icon,
+      dimensions,
+      expandProps,
+      ref,
+      replaceAttrValues,
+      svgProps,
+      titleProp,
+      plugins: [
+        '@svgr/plugin-svgo',
+        '@svgr/plugin-jsx',
+        '@svgr/plugin-prettier'
+      ]
+    },
+    { componentName: name || 'Icon' }
+  )
   res.send({
-    data: prettier.format(data, {
-      parser: 'babylon',
-    })
+    data
   })
 })
 
