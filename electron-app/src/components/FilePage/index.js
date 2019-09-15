@@ -71,9 +71,10 @@ export default () => {
     values: { native: false, name: 'Icon', icon: false, jsx: false }
   })
 
-  function setupReader (file) {
+  function setupReader(file) {
+    // eslint-disable-next-line
     var reader = new FileReader()
-    reader.onload = function () {
+    reader.onload = function() {
       const binaryStr = reader.result
       setSVGCode(svgCode => svgCode.concat({ svg: binaryStr, name: file.name }))
     }
@@ -108,20 +109,20 @@ export default () => {
   return (
     <>
       <StyledForm {...form}>
-        <FormLabel {...form} name='name'>
+        <FormLabel {...form} name="name">
           Component Name
         </FormLabel>
-        <FormInput {...form} name='name' placeholder='Icon' />
+        <FormInput {...form} name="name" placeholder="Icon" />
         <label>
-          <FormCheckbox {...form} name='icon' value='icon' /> Hide Dimensions
+          <FormCheckbox {...form} name="icon" value="icon" /> Hide Dimensions
         </label>
         <label>
-          <FormCheckbox {...form} name='native' value='native' /> React Native
+          <FormCheckbox {...form} name="native" value="native" /> React Native
         </label>
         <label>
-          <FormCheckbox {...form} name='jsx' value='jsx' /> Use JSX extension
+          <FormCheckbox {...form} name="jsx" value="jsx" /> Use JSX extension
         </label>
-        <FormLabel {...form} name='svgCode'>
+        <FormLabel {...form} name="svgCode">
           SVG File
         </FormLabel>
         <DropzoneContainer {...getRootProps()}>
@@ -129,7 +130,7 @@ export default () => {
           {isDragActive ? (
             <p>Drop the file here ...</p>
           ) : (
-            <p>Drag 'n' drop an svg file here, or click to select files</p>
+            <p>Drag and svg files here, or click to select files</p>
           )}
         </DropzoneContainer>
         {rejectedFiles &&

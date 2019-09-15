@@ -20,7 +20,7 @@
     "build": "NODE_OPTIONS=\"--max-old-space-size=4096\" webpack --config webpack.build.config.js --mode production",
     "package": "npm run build",
     "postpackage": "electron-packager ./ --out=./builds --overwrite --icon=./icons/mac/app.icns",
-    "lint": "standard",
+    "lint": "eslint src",
     "pretest": "npm run lint"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@svgr/plugin-svgo": "^4.3.1",
     "copy-to-clipboard": "^3.2.0",
     "electron": "^6.0.7",
+    "eslint-plugin-react": "^7.14.3",
     "prettier": "^1.18.2",
     "prism-react-renderer": "^0.1.7",
     "react": "^16.9.0",
@@ -46,6 +47,11 @@
     "babel-loader": "^8.0.6",
     "babili-webpack-plugin": "^0.1.2",
     "electron-packager": "^14.0.5",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.39.3",

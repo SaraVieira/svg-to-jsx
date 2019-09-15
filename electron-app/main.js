@@ -27,7 +27,7 @@ if (process.platform === 'win32') {
   app.commandLine.appendSwitch('force-device-scale-factor', '1')
 }
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     titleBarStyle: 'hidden',
@@ -35,7 +35,7 @@ function createWindow () {
     width: 1024,
     height: 768,
     show: false,
-    icon: __dirname + '/icons/mac/app.icns',
+    icon: path.join(__dirname, '/icons/mac/app.icns'),
     webPreferences: {
       nodeIntegration: true
     }
@@ -71,7 +71,7 @@ function createWindow () {
   })
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', function() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
