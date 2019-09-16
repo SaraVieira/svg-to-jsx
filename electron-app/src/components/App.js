@@ -52,7 +52,7 @@ const TabButton = styled(Tab)`
 `
 
 const App = () => {
-  const tab = useTabState({ selectedId: 'file' })
+  const tab = useTabState({ selectedId: 'code' })
   return (
     <>
       <TabList {...tab} aria-label='My tabs'>

@@ -1,7 +1,7 @@
 'use strict'
 
 // Import parts of electron to use
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Tray } = require('electron')
 const path = require('path')
 const url = require('url')
 
@@ -27,7 +27,11 @@ if (process.platform === 'win32') {
   app.commandLine.appendSwitch('force-device-scale-factor', '1')
 }
 
+var appIcon = null
 function createWindow() {
+  appIcon = new Tray(path.join(__dirname, 'icons/png/128x128.png'))
+  appIcon.setToolTip('SVG to JSX')
+  appIcon.setImage(path.join(__dirname, 'icons/png/128x128.png'))
   // Create the browser window.
   mainWindow = new BrowserWindow({
     titleBarStyle: 'hidden',
@@ -60,7 +64,6 @@ function createWindow() {
   }
 
   mainWindow.loadURL(indexPath)
-
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
 
