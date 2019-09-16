@@ -29,6 +29,10 @@ const Styles = createGlobalStyle`
     margin: auto;
     margin-top: 80px;
   }
+
+  div[role="tabpanel"] {
+    outline: none;
+  }
 `
 
 const TabButton = styled(Tab)`

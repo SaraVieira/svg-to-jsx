@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import nightOwl from 'prism-react-renderer/themes/nightOwl'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import CopyIcon from './CopyIcon'
 import DownloadIcon from './DownloadIcon'
 import copy from 'copy-to-clipboard'
 import { remote } from 'electron'
+import { Tooltip, TooltipReference, useTooltipState } from 'reakit/Tooltip'
 
 const { dialog } = remote
 const fs = require('fs')
@@ -16,6 +17,15 @@ const Icon = styled(CopyIcon)`
   fill: white;
   position: absolute;
   right: 0;
+  cursor: pointer;
+
+  ${props => props.copied && css`
+    fill: #7cc77c
+  `}
+
+  &:hover {
+    fill: #7cc77c;
+  }
 `
 
 const Download = styled(DownloadIcon)`
@@ -24,26 +34,35 @@ const Download = styled(DownloadIcon)`
   fill: white;
   position: absolute;
   right: 40px;
+  cursor: pointer;
+
+  &:hover {
+    fill: #7cc77c;
+  }
 `
 
-const save = (code, name, jsx) => {
-  dialog
-    .showSaveDialog(null, {
-      defaultPath: `${name.split('.')[0]}.${jsx ? 'jsx' : 'js'}`
-    })
-    .then(({ filePath }) => {
-      if (filePath === undefined) {
-        return
-      }
+export default ({ code, filename, jsx }) => {
+  const copyTooltip = useTooltipState({ placement: 'top-end' })
+  const downloadTooltip = useTooltipState({ placement: 'top-end' })
+  const [copied, setCopied] = useState(false)
 
-      fs.writeFile(filePath, code, err => {
-        if (err) return console.error(err)
+  const save = () => {
+    dialog
+      .showSaveDialog(null, {
+        defaultPath: `${filename.split('.')[0]}.${jsx ? 'jsx' : 'js'}`
       })
-    })
-}
+      .then(({ filePath }) => {
+        if (filePath === undefined) {
+          return
+        }
 
-export default ({ code, filename, jsx }) => (
-  <Highlight {...defaultProps} theme={nightOwl} code={code} language='jsx'>
+        fs.writeFile(filePath, code, err => {
+          if (err) return console.error(err)
+        })
+      })
+  }
+
+  return <Highlight {...defaultProps} theme={nightOwl} code={code} language='jsx'>
     {({ className, style, tokens, getLineProps, getTokenProps }) => (
       <pre
         className={className}
@@ -53,10 +72,22 @@ export default ({ code, filename, jsx }) => (
           'word-wrap': 'break-word'
         }}
       >
-        <Icon
-          onClick={() => copy(code, { message: 'Click to copy to clipboard' })}
-        />
-        <Download onClick={() => save(code, filename, jsx)} />
+        <TooltipReference {...copyTooltip}>
+          <Icon
+            copied={copied}
+            onClick={() => {
+              copy(code, { message: 'Click to copy to clipboard' })
+              setCopied(true)
+
+              window.setTimeout(() => { setCopied(false) }, 1000)
+            }}
+          />
+        </TooltipReference>
+        <Tooltip style={{ fontSize: 12 }}{...copyTooltip}>{copied ? 'Copied!' : 'Copy to Clipboard'}</Tooltip>
+        <TooltipReference {...downloadTooltip}>
+          <Download onClick={save} />
+        </TooltipReference>
+        <Tooltip style={{ fontSize: 12 }}{...downloadTooltip}>Download File</Tooltip>
         {tokens.map((line, i) => (
           <div key={i} {...getLineProps({ line, key: i })}>
             {line.map((token, key) => (
@@ -67,4 +98,4 @@ export default ({ code, filename, jsx }) => (
       </pre>
     )}
   </Highlight>
-)
+}
