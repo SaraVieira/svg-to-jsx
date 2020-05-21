@@ -30,13 +30,24 @@
 
     #app {
       font-family: "Inter";
+      color: #011627;
+      font-size: 14px;
     }
     .copy {
       border: 1px solid #e5e5e5;
-      background: white;
-      padding: 8px 12px;
+      background: #011627;
+      padding: 12px;
       font-weight: 600;
       width: 100%;
+      color: white;
+      border-radius: 4px;
+    }
+
+    input[type="text"] {
+      border: 1px solid #eaeaea;
+      padding: 2px 8px;
+      border-radius: 2px;
+      grid-column: 2/4;
     }
   </style>
   <div id="app">
@@ -46,7 +57,7 @@
     <div>
       <h4>Options</h4>
       <div class="options">
-        <div class="pretty p-smooth p-default p-curve">
+        <div class="pretty p-default p-curve">
           <input
             type="checkbox"
             id="native"
@@ -58,7 +69,7 @@
             <label for="native">React Native</label>
           </div>
         </div>
-        <div class="pretty p-smooth p-default p-curve">
+        <div class="pretty p-default p-curve">
           <input
             type="checkbox"
             id="icon"
@@ -70,7 +81,7 @@
             <label for="icon">Hide Dimensions</label>
           </div>
         </div>
-        <div class="pretty p-smooth p-default p-curve">
+        <div class="pretty p-default p-curve">
           <input
             type="checkbox"
             id="TS"
@@ -125,6 +136,8 @@
               .then((rsp) => rsp.json())
               .then((data) => {
                 this.svg = data.data;
+                new ClipboardJS(".copy");
+                this.selectElementContents(document.querySelector("#code"));
               });
           });
         },
@@ -148,6 +161,13 @@
                 this.svg = data.data;
               });
           },
+          selectElementContents: function (el) {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          },
           getNative: function (e) {
             this.native = e.target.checked;
             this.postToApi();
@@ -161,22 +181,11 @@
             this.postToApi();
           },
           changeName: function (e) {
+            this.name = e.target.value;
             this.postToApi();
           },
         },
       });
-      function selectElementContents(el) {
-        var range = document.createRange();
-        range.selectNodeContents(el);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-      if (event.data.pluginMessage.type === "show-ui") {
-        const codeEl = document.querySelector("#code");
-        new ClipboardJS(".copy");
-        selectElementContents(codeEl);
-      }
     };
   </script>
 </html>
