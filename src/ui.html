@@ -1,40 +1,36 @@
 <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
-<script>
-  function selectElementContents(el) {
-    var range = document.createRange()
-    range.selectNodeContents(el)
-    var sel = window.getSelection()
-    sel.removeAllRanges()
-    sel.addRange(range)
-  }
-  window.onmessage = async event => {
-    const data = event.data.pluginMessage.data
-    if (event.data.pluginMessage.type === 'networkRequest') {
-      fetch('https://transfrom.saravieira.now.sh', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          svg: data
-        })
-      })
-        .then(rsp => rsp.json())
-        .then(data => {
-          parent.postMessage({ pluginMessage: data.data }, '*')
-        })
-    }
-    if (event.data.pluginMessage.type === 'show-ui') {
-      const codeEl = document.querySelector('#code')
-      new ClipboardJS('.copy')
-      codeEl.textContent = data
-      selectElementContents(codeEl)
-    }
-  }
-</script>
+<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
+<script src="https://unpkg.com/vue"></script>
+<link
+  href="https://unpkg.com/prism-theme-night-owl@1.4.0/build/style.css"
+  rel="stylesheet"
+/>
+<script src="https://unpkg.com/prismjs"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"
+/>
 
 <html>
   <style>
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 10px;
+    }
+
+    .options > div {
+      display: flex;
+      align-items: center;
+    }
+
+    .options > div input {
+      margin-right: 5px;
+    }
+
+    #app {
+      font-family: "Inter";
+    }
     .copy {
       border: 1px solid #e5e5e5;
       background: white;
@@ -43,10 +39,144 @@
       width: 100%;
     }
   </style>
-  <div>
+  <div id="app">
     <button class="copy" data-clipboard-target="#code">
       Copy to Clipboard
     </button>
-    <pre><code id="code" style="white-space:pre-wrap;">sadas</code></pre>
+    <div>
+      <h4>Options</h4>
+      <div class="options">
+        <div class="pretty p-smooth p-default p-curve">
+          <input
+            type="checkbox"
+            id="native"
+            name="native"
+            v-model="native"
+            v-on:click="getNative"
+          />
+          <div class="state p-success">
+            <label for="native">React Native</label>
+          </div>
+        </div>
+        <div class="pretty p-smooth p-default p-curve">
+          <input
+            type="checkbox"
+            id="icon"
+            name="icon"
+            v-model="icon"
+            v-on:click="getDimensions"
+          />
+          <div class="state p-success">
+            <label for="icon">Hide Dimensions</label>
+          </div>
+        </div>
+        <div class="pretty p-smooth p-default p-curve">
+          <input
+            type="checkbox"
+            id="TS"
+            name="TS"
+            v-model="TS"
+            v-on:click="getTS"
+          />
+          <div class="state p-success">
+            <label for="TS">TypeScript</label>
+          </div>
+        </div>
+        <label for="name">Component Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          v-model="name"
+          v-on:change="changeName"
+        />
+      </div>
+    </div>
+    <pre><code  v-html="$options.filters.highlight(svg)" class="language-javascript" id="code" style="white-space: pre-wrap;"
+    ></code></pre>
   </div>
+  <script>
+    window.onmessage = async (event) => {
+      const data = event.data.pluginMessage.data;
+      // Highlight some code
+      Vue.filter("highlight", (code, lang = "javascript") => {
+        return Prism.highlight(code, Prism.languages[lang], lang);
+      });
+      var app = new Vue({
+        el: "#app",
+        data: {
+          TS: false,
+          icon: false,
+          native: false,
+          svg: data,
+          name: "Icon",
+        },
+        mounted: function () {
+          this.$nextTick(function () {
+            fetch("http://localhost:3000/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                svg: data,
+              }),
+            })
+              .then((rsp) => rsp.json())
+              .then((data) => {
+                this.svg = data.data;
+              });
+          });
+        },
+        methods: {
+          postToApi: function () {
+            fetch("http://localhost:3000/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                typescript: this.TS,
+                svg: data,
+                native: this.native,
+                name: this.name,
+                icon: this.icon,
+              }),
+            })
+              .then((rsp) => rsp.json())
+              .then((data) => {
+                this.svg = data.data;
+              });
+          },
+          getNative: function (e) {
+            this.native = e.target.checked;
+            this.postToApi();
+          },
+          getDimensions: function (e) {
+            this.icon = e.target.checked;
+            this.postToApi();
+          },
+          getTS: function (e) {
+            this.TS = e.target.checked;
+            this.postToApi();
+          },
+          changeName: function (e) {
+            this.postToApi();
+          },
+        },
+      });
+      function selectElementContents(el) {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      if (event.data.pluginMessage.type === "show-ui") {
+        const codeEl = document.querySelector("#code");
+        new ClipboardJS(".copy");
+        selectElementContents(codeEl);
+      }
+    };
+  </script>
 </html>
