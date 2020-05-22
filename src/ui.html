@@ -1,106 +1,109 @@
-<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
-<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
-<script src="https://unpkg.com/vue"></script>
-<link
-  href="https://unpkg.com/prism-theme-night-owl@1.4.0/build/style.css"
-  rel="stylesheet"
-/>
-<script src="https://unpkg.com/prismjs"></script>
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css"
-/>
-
 <html>
-  <style>
-    .options {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-gap: 10px;
-    }
+  <head>
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
 
-    .options > div {
-      display: flex;
-      align-items: center;
-    }
+    <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://rawcdn.githack.com/thomas-lowry/figma-plugin-ds/34cb6adef39274e7bdab08007c75819c9b19470c/dist/figma-plugin-ds.css"
+    />
+    <link
+      href="https://unpkg.com/prism-theme-night-owl@1.4.0/build/style.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/prismjs@1.20.0/prism.js"></script>
+    <style>
+      .options {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 10px;
+      }
 
-    .options > div input {
-      margin-right: 5px;
-    }
+      .options > div {
+        display: flex;
+        align-items: center;
+      }
 
-    #app {
-      font-family: "Inter";
-      color: #011627;
-      font-size: 14px;
-    }
-    .copy {
-      border: 1px solid #e5e5e5;
-      background: #011627;
-      padding: 12px;
-      font-weight: 600;
-      width: 100%;
-      color: white;
-      border-radius: 4px;
-    }
+      #app {
+        font-family: "Inter";
+        color: #011627;
+        font-size: 14px;
+        padding: 20px;
+      }
+      .copy {
+        width: 100%;
+        justify-content: center;
+      }
 
-    input[type="text"] {
-      border: 1px solid #eaeaea;
-      padding: 2px 8px;
-      border-radius: 2px;
-      grid-column: 2/4;
-    }
-  </style>
+      .span {
+        grid-column: 1/3;
+      }
+
+      .span label {
+        width: 200px;
+        padding-left: 8px;
+      }
+    </style>
+  </head>
   <div id="app">
-    <button class="copy" data-clipboard-target="#code">
+    <button class="button button--primary copy" data-clipboard-target="#code">
       Copy to Clipboard
     </button>
     <div>
-      <h4>Options</h4>
+      <div class="section-title">Options</div>
       <div class="options">
-        <div class="pretty p-default p-curve">
+        <div class="checkbox">
           <input
             type="checkbox"
+            class="checkbox__box"
             id="native"
             name="native"
             v-model="native"
             v-on:click="getNative"
           />
-          <div class="state p-success">
-            <label for="native">React Native</label>
-          </div>
+
+          <label class="checkbox__label" for="native">React Native</label>
         </div>
-        <div class="pretty p-default p-curve">
+        <div class="checkbox">
           <input
             type="checkbox"
+            class="checkbox__box"
             id="icon"
             name="icon"
             v-model="icon"
             v-on:click="getDimensions"
           />
-          <div class="state p-success">
-            <label for="icon">Hide Dimensions</label>
-          </div>
+
+          <label class="checkbox__label" for="icon">Hide Dimensions</label>
         </div>
-        <div class="pretty p-default p-curve">
+        <div class="checkbox">
           <input
             type="checkbox"
+            class="checkbox__box"
             id="TS"
             name="TS"
             v-model="TS"
             v-on:click="getTS"
           />
-          <div class="state p-success">
-            <label for="TS">TypeScript</label>
-          </div>
+
+          <label class="checkbox__label" for="TS">TypeScript</label>
         </div>
-        <label for="name">Component Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          v-model="name"
-          v-on:change="changeName"
-        />
+        <div class="input span">
+          <label for="name" class="type--small">Component Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            v-model="name"
+            v-on:change="changeName"
+            class="input__field"
+          />
+        </div>
       </div>
     </div>
     <pre><code  v-html="$options.filters.highlight(svg)" class="language-javascript" id="code" style="white-space: pre-wrap;"
@@ -109,11 +112,11 @@
   <script>
     window.onmessage = async (event) => {
       const data = event.data.pluginMessage.data;
-      // Highlight some code
       Vue.filter("highlight", (code, lang = "javascript") => {
         return Prism.highlight(code, Prism.languages[lang], lang);
       });
-      var app = new Vue({
+
+      new Vue({
         el: "#app",
         data: {
           TS: false,
@@ -121,10 +124,12 @@
           native: false,
           svg: data,
           name: "Icon",
+          //url: "http://localhost:3000/",
+          url: "https://transfrom.saravieira.now.sh/",
         },
         mounted: function () {
           this.$nextTick(function () {
-            fetch("http://localhost:3000/", {
+            fetch(this.url, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -143,7 +148,7 @@
         },
         methods: {
           postToApi: function () {
-            fetch("http://localhost:3000/", {
+            fetch(this.url, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
