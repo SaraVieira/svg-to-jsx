@@ -4,7 +4,7 @@
     "copy-webpack-plugin": "^6.0.1",
     "figma-plugin-ds": "^0.1.8",
     "node-fetch": "^2.6.0",
-    "prismjs": "^1.20.0",
+    "prismjs": "^1.21.0",
     "ts-loader": "^7.0.4",
     "typescript": "^3.9.3",
     "url-loader": "^4.1.0",
