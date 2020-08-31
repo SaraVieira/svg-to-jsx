@@ -1,5 +1,8 @@
 # SVG to JSX Figma Plugin
 
+[![](https://img.shields.io/endpoint?url=https://figma-plugin-badges.vercel.app/api/installs/749818562498396194)](https://www.figma.com/community/plugin/749818562498396194/SVG-to-JSX)
+[![](https://img.shields.io/endpoint?url=https://figma-plugin-badges.vercel.app/api/likes/749818562498396194)](https://www.figma.com/community/plugin/749818562498396194/SVG-to-JSX)
+
 ![Plugin UI](./ui.png)
 
 This plugins does what it says really, gets your SVG code in figma and gives you ready to use JSX you can copy and paste into your react apps and its written in ...🥁🥁 VUE 🥁🥁...
