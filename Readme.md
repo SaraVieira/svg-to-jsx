@@ -40,3 +40,33 @@ Add it to figma by going to "Your Face > Plugins" and clicking on create a new p
 Open figma and right click a component and you can access the plugin in Plugins > Development > SVG to JSX.
 
 When making changes go to Menu > Plugins > "Run Last Plugin" (Or hit ⌥⌘P for Mac or Ctrl+Alt+P for Windows).
+
+## Know errors while trying to run locally
+### LoadRunner.js throwing Error: error:0308010C:digital envelope routines::unsupported
+If you get this error, you can solve it by enabling legacy OpenSSL provider.
+
+On Unix-like (Linux, macOS, Git bash, etc.):
+
+```bash
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+
+On Windows command prompt:
+
+```cmd
+set NODE_OPTIONS=--openssl-legacy-provider
+```
+
+On PowerShell:
+
+```powershell
+$env:NODE_OPTIONS = "--openssl-legacy-provider"
+```
+
+[Reference - Stackoverflow][1]
+
+[1]: https://stackoverflow.com/a/69699772/8197137
+
+
+
+
