@@ -1,8 +1,6 @@
 <html>
   <head>
-    <!-- <script src="https://unpkg.com/vue"></script> -->
     <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
-
     <script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
@@ -47,6 +45,24 @@
       .span label {
         width: 200px;
         padding-left: 8px;
+      }
+
+      .code-wrapper {
+        position: relative;
+        min-height: 300px;
+        background: #011627;
+      }
+
+      .loading {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.4);
       }
     </style>
   </head>
@@ -106,19 +122,76 @@
         </div>
       </div>
     </div>
-    <pre><code  v-html="$options.filters.highlight(svg)" class="language-javascript" id="code" style="white-space: pre-wrap;"
-    ></code></pre>
+    <div class="code-wrapper">
+      <div class="loading" v-if="loading">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="44"
+          height="44"
+          viewBox="0 0 44 44"
+          stroke="#fff"
+        >
+          <g fill="none" fill-rule="evenodd" stroke-width="2">
+            <circle cx="22" cy="22" r="1">
+              <animate
+                attributeName="r"
+                begin="0s"
+                dur="1.8s"
+                values="1; 20"
+                calcMode="spline"
+                keyTimes="0; 1"
+                keySplines="0.165, 0.84, 0.44, 1"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="stroke-opacity"
+                begin="0s"
+                dur="1.8s"
+                values="1; 0"
+                calcMode="spline"
+                keyTimes="0; 1"
+                keySplines="0.3, 0.61, 0.355, 1"
+                repeatCount="indefinite"
+              />
+            </circle>
+            <circle cx="22" cy="22" r="1">
+              <animate
+                attributeName="r"
+                begin="-0.9s"
+                dur="1.8s"
+                values="1; 20"
+                calcMode="spline"
+                keyTimes="0; 1"
+                keySplines="0.165, 0.84, 0.44, 1"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="stroke-opacity"
+                begin="-0.9s"
+                dur="1.8s"
+                values="1; 0"
+                calcMode="spline"
+                keyTimes="0; 1"
+                keySplines="0.3, 0.61, 0.355, 1"
+                repeatCount="indefinite"
+              />
+            </circle>
+          </g>
+        </svg>
+      </div>
+      <pre style="white-space: normal">
+      <code class="language-javascript" id="code" style="white-space: pre-wrap;"></code>
+    </pre>
+    </div>
   </div>
   <script>
     window.onmessage = async (event) => {
       const data = event.data.pluginMessage.data;
-      Vue.filter("highlight", (code, lang = "javascript") => {
-        return Prism.highlight(code, Prism.languages[lang], lang);
-      });
 
       new Vue({
         el: "#app",
         data: {
+          loading: false,
           TS: false,
           icon: false,
           native: false,
@@ -129,25 +202,12 @@
         },
         mounted: function () {
           this.$nextTick(function () {
-            fetch(this.url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                svg: data,
-              }),
-            })
-              .then((rsp) => rsp.json())
-              .then((data) => {
-                this.svg = data.data;
-                new ClipboardJS(".copy");
-                this.selectElementContents(document.querySelector("#code"));
-              });
+            this.postToApi();
           });
         },
         methods: {
           postToApi: function () {
+            this.loading = true;
             fetch(this.url, {
               method: "POST",
               headers: {
@@ -163,7 +223,14 @@
             })
               .then((rsp) => rsp.json())
               .then((data) => {
-                this.svg = data.data;
+                document.querySelector("#code").innerHTML = Prism.highlight(
+                  data.data,
+                  Prism.languages["javascript"],
+                  "javascript"
+                );
+                new ClipboardJS(".copy");
+                this.selectElementContents(document.querySelector("#code"));
+                this.loading = false;
               });
           },
           selectElementContents: function (el) {
