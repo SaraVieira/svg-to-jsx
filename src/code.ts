@@ -40,7 +40,7 @@ figma.on(
     () => {
       figma.currentPage.selection.map((selected) => {
         selected.exportAsync({ format: 'SVG' }).then((svgCode) => {
-          exportSelected(svgCode)
+          figma.ui.postMessage({ type: 'networkRequest', data: ab2str(svgCode) })
         })
       })
     },
