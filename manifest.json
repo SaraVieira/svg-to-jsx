@@ -4,5 +4,6 @@
   "main": "dist/code.js",
   "ui": "dist/ui.html",
   "id": "749818562498396194",
-  "editorType": ["figma", "figjam"]
+  "editorType": ["figma", "figjam"],
+  "documentAccess": "dynamic-page"
 }

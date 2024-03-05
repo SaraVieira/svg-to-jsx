@@ -3,6 +3,7 @@
     "target": "es6",
     "lib": ["dom", "es2015", "es2017"],
     "sourceMap": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "typeRoots": ["./node_modules/@types", "./node_modules/@figma"]
   }
 }
