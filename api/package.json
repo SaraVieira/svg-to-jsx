@@ -1,26 +1,27 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon ./index.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@svgr/core": "^8.1.0",
-    "@svgr/plugin-jsx": "^8.1.0",
-    "@svgr/plugin-prettier": "^8.1.0",
-    "@svgr/plugin-svgo": "^8.1.0",
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.3",
-    "helmet": "^7.1.0",
-    "prettier": "^3.2.5"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
-  }
+	"name": "template-worker-typescript",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy src/index.ts --minify",
+		"dev": "wrangler dev",
+		"start": "wrangler dev"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.24.0",
+		"@cloudflare/workers-types": "^4.20240222.0",
+		"@svgr/core": "^8.1.0",
+		"@svgr/plugin-jsx": "^8.1.0",
+		"@svgr/plugin-prettier": "^8.1.0",
+		"@svgr/plugin-svgo": "^8.1.0",
+		"@types/babel__core": "^7.20.5",
+		"@types/svg-parser": "^2.0.6",
+		"svg-parser": "^2.0.4",
+		"typescript": "^5.3.3",
+		"wrangler": "^3.30.1"
+	},
+	"dependencies": {
+		"prettier": "^3.2.5",
+		"svgo": "^3.2.0"
+	}
 }

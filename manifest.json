@@ -5,5 +5,15 @@
   "ui": "dist/ui.html",
   "id": "749818562498396194",
   "editorType": ["figma", "figjam"],
-  "documentAccess": "dynamic-page"
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://svg-transform.nikkitaftw.workers.dev",
+      "https://unpkg.com",
+      "https://rawcdn.githack.com",
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://rsms.me"
+    ]
+  }
 }
