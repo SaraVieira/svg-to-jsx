@@ -26,7 +26,7 @@ app.post("/", (req, res) => {
   } = req.body;
   try {
     console.log(native, svg);
-    const data = svgr.default.sync(
+    const data = svgr.transform.sync(
       svg,
       {
         native,
